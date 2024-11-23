@@ -15,4 +15,5 @@ Where <Model_name> relates to the folder in which the model is stored.
 In the case of the SP model on the SP folder, there are two main flags:
 
   -ds: Provide a dataset name. AllPep of L67 are the options.
+  
   -cyc: When used, Cyclic Permutations will be used.
