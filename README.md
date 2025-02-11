@@ -27,4 +27,4 @@ If you want to run pretrained models you have to add the ```-t``` flag.
 ```bash
   python Model_<Model_name>.py -t
 ```
-Note that models using mutation lack a pkl file containing the mutations. This files woll be supplied on demand.
+Note that models using mutations lack a pkl file containing the mutations. This files will be supplied on demand.
