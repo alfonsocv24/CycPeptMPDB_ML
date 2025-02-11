@@ -23,3 +23,7 @@ In the case of the SP model on the SP folder, there are two main flags:
     ```bash
     python Model_SP.py -ds L67 -cyc
     ```
+If you want to run pretrained models you have to add the ```-t``` flag.
+```bash
+  python Model_<Model_name>.py -t
+```
