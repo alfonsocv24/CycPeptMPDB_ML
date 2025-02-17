@@ -12,7 +12,7 @@ With the requirements ready, you can run any of the codes using:
   python Model_<Model_name>.py
 ```
 Where <Model_name> relates to the folder in which the model is stored.
-In the case of the SP model on the SP folder, there are two main flags:
+In the case of the SP model on the SP folder, there are three main flags:
 
   - ds: Provide a dataset name. AllPep of L67 are the options.
     ```bash
@@ -22,4 +22,9 @@ In the case of the SP model on the SP folder, there are two main flags:
   - cyc: When used, Cyclic Permutations will be used.
     ```bash
     python Model_SP.py -ds L67 -cyc
+    ```
+
+  - t: When used, trained weights will be loaded.
+    ```bash
+    python Model_SP.py -ds L67 -t
     ```
