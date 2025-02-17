@@ -11,13 +11,13 @@ from keras import layers
 
 
 class ConvBlock(layers.Layer):
-    def __init__(self, filters_conv1, filters_conv2, units_lstm, neurons_Dense, rate, **kwargs):
+    def __init__(self, filters_conv1, filters_conv2, units_lstm, neurons_Dense, drop_rate, **kwargs):
         super().__init__(**kwargs)
         self.filters_conv1 = filters_conv1
         self.filters_conv2 = filters_conv2
         self.units_lstm = units_lstm
         # self.n_blocks = n_blocks
-        self.rate = rate
+        self.drop_rate = drop_rate
         self.neurons_Dense = neurons_Dense
 # =============================================================================
 #         Create layers
@@ -28,7 +28,7 @@ class ConvBlock(layers.Layer):
                                    kernel_initializer = "he_normal")
         self.LSTM = layers.LSTM(self.units_lstm, activation = 'relu', 
                                 return_sequences = False)
-        self.Dropout = layers.Dropout(rate)
+        self.Dropout = layers.Dropout(drop_rate)
         self.Dense = layers.Dense(neurons_Dense, activation = 'relu')
         
     def call(self, inputs):
@@ -70,6 +70,6 @@ class ConvBlock(layers.Layer):
             "filters_conv2": self.filters_conv2,
             "units_lstm": self.units_lstm,
             "neurons_Dense" : self.neurons_Dense,
-            "drop_rate" : self.rate,
+            "drop_rate" : self.drop_rate,
         })
         return config
