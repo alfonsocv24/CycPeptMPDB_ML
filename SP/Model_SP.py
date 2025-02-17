@@ -258,6 +258,8 @@ for train, test in kfold.split(X, y):
         for j in i:
             new_y.append(round(j))
     y_pred = np.array(new_y)
+    y_pred = 1 - y_pred # Change sign to match CycPeptMPDB
+    TEST_target = 1 - TEST_target # Change sign to match CycPeptMPDB
     confusion_TEST = confusion_matrix(TEST_target, y_pred)
     precision_TEST = precision_score(TEST_target, y_pred)
     f1_TEST = f1_score(TEST_target, y_pred)
@@ -276,11 +278,11 @@ for train, test in kfold.split(X, y):
     exist_file = os.system(f'ls {file_metric}')
     with open(file_metric, 'a') as f:
         if exist_file != 0:
-            f.write('Fold'+sep+'True00'+sep+'False01'+sep+'False10'+sep+'True11'+sep+'Precision'+sep+'f1'+sep+'Recall'+sep+'Roc_auc'+sep+'Matthews'+sep+'Geom_mean\n')
-        f.write('{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}\n'.format(fold, sep, confusion_TEST[0][0],sep,
+            f.write('Fold'+sep+'True00'+sep+'False01'+sep+'False10'+sep+'True11'+sep+'Accuracy'+sep+'Precision'+sep+'f1'+sep+'Recall'+sep+'Roc_auc'+sep+'Matthews'+sep+'Geom_mean\n')
+        f.write('{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}\n'.format(fold, sep, confusion_TEST[0][0],sep,
                                                                   confusion_TEST[0][1],sep,
                                                                   confusion_TEST[1][0],sep,
-                                                                  confusion_TEST[1][1],sep,
+                                                                  confusion_TEST[1][1],sep, data_2_plot[3], sep,
                                                                   precision_TEST,sep,f1_TEST,
                                                                   sep,recall_TEST,sep,roc_auc_TEST,
                                                                   sep,matthews_TEST,sep,geom_mean_TEST))
@@ -294,6 +296,34 @@ for train, test in kfold.split(X, y):
         f.close()
     #Increase fold number
     fold += 1
+    
+metrics_file = f'{file_metric}'
+cols = ['Accuracy', 'Precision', 'f1', 'Recall', 'Roc_auc', 'Matthews', 'Geom_mean']
+metrics_all = '/home/ciqus/Scripts/FinalModel/4GitHub/Metrics_ALL.csv'
+df = pd.read_csv(metrics_file, sep = '\s+')
+df = df[cols]
+means = df.mean().to_numpy()
+stds = df.std().to_numpy()
+plus_minus = "\u00B1"
+# Store mean values
+if cyclicperm:
+    model = [f'SP_{dataset}_CycP']
+else:
+    model = [f'SP_{dataset}']
+
+exist_file = os.system(f'ls {metrics_all}')
+with open(metrics_all, 'a') as f:
+    if exist_file!= 0:
+        header = ['Model'] + cols
+        header = "".join(f'{col:<25}' for col in header)
+        f.write(header + '\n')
+    metrics = [f'{mean:.3f} {plus_minus} {stds[idx]:.3f}' for idx, mean in enumerate(means)]
+    line = model + metrics
+    line = "".join(f'{col:<25}' for col in line)
+    f.write(line + '\n')
+    f.close()
+
+
 end = time.time()
 print(f'Time needed: {end - start}s')
     
